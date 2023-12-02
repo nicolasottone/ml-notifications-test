@@ -25,3 +25,31 @@ export async function getNotificationResource(notification: NotificationType) {
     return null
   }
 }
+
+/**
+ * Retrieve the missed question notifications. Limit 20 by default
+ *
+ * @returns {Promise<any|null>} The data from the notifications fetch, or null in case of an error.
+ */
+export async function getMissedQuestionsNotifications() {
+  try {
+    const response = await fetch(
+      `https://api.mercadolibre.com/missed_feeds?app_id=${process.env.ML_APP_ID}&topic=questions&limit=20`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.TOKEN}`
+        }
+      }
+    )
+    if (!response.ok) {
+      console.error(`Error fetching missed question notifications, details:`, response.statusText)
+      return null
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error(`Error fetching missed question notifications, details:`, error)
+    return null
+  }
+}

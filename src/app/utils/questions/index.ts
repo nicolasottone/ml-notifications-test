@@ -84,3 +84,61 @@ export async function getQuestionsByItem(itemId: string) {
     return null
   }
 }
+
+/**
+ * Fetches questions associated with a specific seller, sorted in ascending order by creation date.
+ * @param {string} sellerId - The ID of the seller for whom questions are to be obtained.
+ * @returns {Promise<QuestionDetailsType[]|null>} - questions arrays or null if there is an error.
+ * @throws {Error} - Throws an error if there is an issue making the API request.
+ */
+export async function getQuestionsBySeller(sellerId: string) {
+  try {
+    const response = await fetch(
+      `https://api.mercadolibre.com/questions/search?seller_id=${sellerId}&sort_fields=date_created&sort_types=ASC&api_version=4`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.TOKEN}`
+        }
+      }
+    )
+    if (!response.ok) {
+      console.error(`Error fetching questions from seller: ${sellerId}`, response.statusText)
+      return null
+    }
+    const data: ApiQuestionResponse = await response.json()
+    return data.questions
+  } catch (error) {
+    console.error(`Error fetching questions from seller: ${sellerId}`, error)
+    return null
+  }
+}
+
+/**
+ * Fetches unanswered questions associated with a specific seller, sorted in ascending order by creation date.
+ * @param {string} sellerId - The ID of the seller for whom unanswered questions are to be obtained.
+ * @returns {Promise<QuestionDetailsType[]|null>} - array of unanswered questions or null if there is an error.
+ * @throws {Error} - Throws an error if there is an issue making the API request.
+ */
+export async function getUnansweredQuestionsBySeller(sellerId: string) {
+  try {
+    const response = await fetch(
+      `https://api.mercadolibre.com/questions/search?seller_id=${sellerId}&status=UNANSWERED&sort_fields=date_created&sort_types=ASC&api_version=4`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.TOKEN}`
+        }
+      }
+    )
+    if (!response.ok) {
+      console.error(`Error fetching questions from seller: ${sellerId}`, response.statusText)
+      return null
+    }
+    const data: ApiQuestionResponse = await response.json()
+    return data.questions
+  } catch (error) {
+    console.error(`Error fetching questions from seller: ${sellerId}`, error)
+    return null
+  }
+}

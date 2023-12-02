@@ -1,4 +1,4 @@
-import { QuestionDetailsType } from './types'
+import { ApiQuestionResponse, QuestionDetailsType } from './types'
 
 export async function getQuestionDetails(questionId: string) {
   try {
@@ -35,8 +35,8 @@ export async function getQuestionsByItemAndUser(itemId: string, userId: string) 
       console.error(`Error fetching questions from item: ${itemId} & user: ${userId}`, response.statusText)
       return null
     }
-    const question: QuestionDetailsType = await response.json()
-    return question.text
+    const data: ApiQuestionResponse = await response.json()
+    return data.questions
   } catch (error) {
     console.error(`Error fetching questions from item: ${itemId} & user: ${userId}`, error)
     return null

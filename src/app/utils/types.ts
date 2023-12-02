@@ -11,7 +11,7 @@ export type QuestionDetailsType = {
   id: number
   seller_id: number
   text: string
-  tags: string[]
+  tags: string[] | null
   status: QuestionStatus
   item_id: string
   date_created: string

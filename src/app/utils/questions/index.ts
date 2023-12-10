@@ -1,4 +1,31 @@
-import { ApiQuestionResponse, QuestionDetailsType } from './types'
+import { NotificationType } from '@/app/utils/notifications/types'
+import { ApiQuestionResponse, QuestionDetailsType } from '@/app/utils/questions/types'
+
+/**
+ * Retrieve the question data for a given notification.
+ *
+ * @param {NotificationType} notification - The notification object that includes question data.
+ * @returns {Promise<any|null>} The data from the requested resource, or null in case of an error.
+ */
+export async function getQuestion(notification: NotificationType) {
+  try {
+    const response = await fetch(`https://api.mercadolibre.com${notification.resource}?api_version=4`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN}`
+      }
+    })
+    if (!response.ok) {
+      console.error(`Error fetching ${notification.resource}, details:`, response.statusText)
+      return null
+    }
+
+    return (await response.json()) as QuestionDetailsType
+  } catch (error) {
+    console.error(`Error fetching ${notification.resource}, details:`, error)
+    return null
+  }
+}
 
 /**
  * Fetches details of a specific question.

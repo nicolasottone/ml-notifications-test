@@ -3,20 +3,14 @@
 import { useState } from 'react'
 
 export default function Home() {
-  const sendNotificationTest = async () => {
+  const [data, setData] = useState('Apretar GET')
+  const [jsonInput, setJsonInput] = useState('')
+
+  const sendNotificationTest = async (jsonInput: string) => {
     const res = await fetch('api/notifications', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        _id: 'f9f08571-1f65-4c46-9e0a-c0f43faas1557e',
-        resource: '/questions/5036111111',
-        user_id: 123456789,
-        topic: 'questions',
-        application_id: 2069392825111111,
-        attempts: 1,
-        sent: '2017-10-09T13:51:05.464Z',
-        received: '2017-10-09T13:51:05.438Z'
-      })
+      body: jsonInput
     })
   }
 
@@ -28,16 +22,25 @@ export default function Home() {
     ).json()
     setData(JSON.stringify(res))
   }
-  const [data, setData] = useState('Apretar GET')
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    sendNotificationTest(jsonInput)
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <div className="flex gap-7 p-4">
-        <button onClick={sendNotificationTest}>SEND NOTIFICATION TEST</button>
-        <button onClick={getLastNotification}>GET LAST NOTIFICATION</button>
-      </div>
+    //make the textarea 6 rows high
+    <main className="flex min-h-screen gap-4 flex-col items-center p-24">
+      <form className="flex w-full flex-col gap-4 font-mono lg:flex" onSubmit={handleFormSubmit}>
+        <button className="border" type="submit">
+          SEND NOTIFICATION TEST
+        </button>
+        <textarea rows={6} className="p-2" value={jsonInput} onChange={(e) => setJsonInput(e.target.value)} />
+      </form>
       <div className="max-w-5xl w-full flex-col gap-4 font-mono lg:flex">
-        <h2>ULTIMA NOTI RECIBIDA</h2>
+        <button className="border" onClick={getLastNotification}>
+          GET LAST NOTIFICATION
+        </button>
         <p>{data}</p>
       </div>
     </main>

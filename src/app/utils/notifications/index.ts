@@ -1,3 +1,4 @@
+import { ApiQuestionResponse } from '../questions/types'
 import { NotificationType } from './types'
 
 /**
@@ -19,7 +20,7 @@ export async function getNotificationResource(notification: NotificationType) {
       return null
     }
 
-    return await response.json()
+    return (await response.json()) as ApiQuestionResponse
   } catch (error) {
     console.error(`Error fetching ${notification.resource}, details:`, error)
     return null

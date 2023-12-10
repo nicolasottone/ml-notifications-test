@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     body: await request.text()
   })
 
-  await fetch(newRequest)
+  fetch(newRequest)
 
   return NextResponse.next()
 }
